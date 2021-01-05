@@ -1,0 +1,18 @@
+[
+    {
+        "number": 0,
+        "capacity": 50
+    },
+    {
+        "number": 1,
+        "capacity": 75
+    },
+    {
+        "number": 2,
+        "capacity": 100
+    },
+    {
+        "number": 3,
+        "capacity": 150
+    }
+]
