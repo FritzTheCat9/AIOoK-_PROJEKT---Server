@@ -172,7 +172,7 @@ app.get('/halls', (req, res) => {
     });
 });
 
-/* Zwrócenie filmu o podanym id*/
+/* Zwrócenie sali o podanym id*/
 app.get('/halls/:id', (req, res) => {
     fs.readFile('./halls.json', 'utf8', (err, hallsJson) => {
         if (err) {
@@ -193,7 +193,7 @@ app.get('/halls/:id', (req, res) => {
     });
 });
 
-/* Dodanie filmu o podanym id */
+/* Dodanie sali o podanym id */
 app.post('/halls', (req, res) => {
     fs.readFile('./halls.json', 'utf8', (err, hallsJson) => {
         if (err) {
@@ -223,7 +223,7 @@ app.post('/halls', (req, res) => {
     });
 });
 
-/* Edycja filmu o podanym id */
+/* Edycja sali o podanym id */
 app.put('/halls/:id', (req, res) => {
     fs.readFile('./halls.json', 'utf8', (err, hallsJson) => {
         if (err) {
@@ -271,7 +271,7 @@ app.put('/halls/:id', (req, res) => {
     });
 });
 
-/* Usunięcie filmu o podanym id */
+/* Usunięcie sali o podanym id */
 app.delete('/halls/:id', (req, res) => {
     fs.readFile('./halls.json', 'utf8', (err, hallsJson) => {
         if (err) {
@@ -314,7 +314,7 @@ app.get('/seances', (req, res) => {
     });
 });
 
-/* Zwrócenie filmu o podanym id*/
+/* Zwrócenie seansu o podanym id*/
 app.get('/seances/:id', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
         if (err) {
@@ -335,7 +335,7 @@ app.get('/seances/:id', (req, res) => {
     });
 });
 
-/* Dodanie filmu o podanym id */
+/* Dodanie seansu o podanym id */
 app.post('/seances', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
         if (err) {
@@ -365,7 +365,7 @@ app.post('/seances', (req, res) => {
     });
 });
 
-/* Edycja filmu o podanym id */
+/* Edycja seansu o podanym id */
 app.put('/seances/:id', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
         if (err) {
@@ -413,7 +413,7 @@ app.put('/seances/:id', (req, res) => {
     });
 });
 
-/* Usunięcie filmu o podanym id */
+/* Usunięcie seansu o podanym id */
 app.delete('/seances/:id', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
         if (err) {
