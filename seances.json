@@ -3,9 +3,9 @@
     "id": 0,
     "date": "2012-04-23T18:25:43.511Z",
     "movie": {
-      "id": 0,
-      "title": "Dupa",
-      "duration": 180
+      "id": 2,
+      "title": "Hobbit2",
+      "duration": 175
     },
     "hall": {
       "number": 0,
@@ -70,9 +70,9 @@
     "id": 1,
     "date": "2012-04-23T18:25:43.511Z",
     "movie": {
-      "id": 0,
-      "title": "Obbs",
-      "duration": 180
+      "id": 2,
+      "title": "Hobbit2",
+      "duration": 175
     },
     "hall": {
       "number": 0,
@@ -204,9 +204,9 @@
     "id": 3,
     "date": "2012-04-23T18:25:43.511Z",
     "movie": {
-      "id": 0,
-      "title": "Cycki",
-      "duration": 180
+      "id": 2,
+      "title": "Hobbit2",
+      "duration": 175
     },
     "hall": {
       "number": 0,

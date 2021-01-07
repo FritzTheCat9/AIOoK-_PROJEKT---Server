@@ -339,6 +339,33 @@ app.get('/seances/:date', (req, res) => {
     });
 });
 
+/* Zwrócenie seansów w podanym dniu i o podanym id filmu */
+app.get('/seances/:date/:id', (req, res) => {
+    fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
+        if (err) {
+            console.log("File read failed in GET /seances/" + req.params.date +"/"+req.params.id+ ": "+ err);
+            res.status(500).send('File read failed');
+            return;
+        }
+        var seances = JSON.parse(seancesJson);
+        var seance = seances.filter(seanceTmp => 
+            seanceTmp.movie.id === parseInt(req.params.id) &&
+            new Date(seanceTmp.date).getDate() == new Date(req.params.date).getDate() && 
+            new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth()+1 && 
+            new Date(seanceTmp.date).getFullYear() == new Date(req.params.date).getFullYear()
+        );
+        if (!seance) {
+            console.log("Can't find seance with date: " + req.params.date);
+            res.status(500).send('Cant find seance with date: ' + req.params.date + 1);
+            return;
+        }
+        var seanceJson = JSON.stringify(seance);
+        console.log("GET /seances/" + req.params.date);
+        res.send(seanceJson);
+    });
+});
+
+
 /* Zwrócenie seansu o podanym id */
 app.get('/seances/:id', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
