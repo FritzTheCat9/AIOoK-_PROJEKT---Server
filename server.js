@@ -339,6 +339,47 @@ app.get('/seances/:date', (req, res) => {
     });
 });
 
+/* Zwrócenie seansów w podanym dniu i godzinie */
+app.get('/seancesCur/:date', (req, res) => {
+    fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
+        if (err) {
+            console.log("File read failed in GET /seancesCur/" + req.params.date + ": "+ err);
+            res.status(500).send('File read failed');
+            return;
+        }
+        console.log("DATA: "+req.params.date);
+        var seances = JSON.parse(seancesJson);
+        var seance = seances.filter(seanceTmp => 
+            new Date(seanceTmp.date).getTime() > new Date(req.params.date).getTime() 
+            // new Date(seanceTmp.date).getMinutes() == new Date(req.params.date).getMinutes()&&
+            // new Date(seanceTmp.date).getHours() == new Date(req.params.date).getHours()&&
+            // new Date(seanceTmp.date).getDate() == new Date(req.params.date).getDate() &&
+            // new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth()+1 && 
+            // new Date(seanceTmp.date).getFullYear() == new Date(req.params.date).getFullYear()
+        );
+        console.log("WWWWWWWWWWWWWWWWWWWWWWWw");
+        console.log(new Date(req.params.date).getDate() );
+        console.log(new Date(seances[0].date).getDate() );
+        console.log(new Date(seances[1].date).getDate() );
+        console.log(new Date(seances[2].date).getDate() );
+        console.log(new Date(seances[3].date).getDate() );
+        console.log(new Date(seances[4].date).getDate() );
+        console.log(new Date(seances[5].date).getDate() );
+        console.log(new Date(seances[6].date).getDate() );
+        console.log(new Date(seances[7].date).getDate() );
+        console.log(new Date(seances[8].date).getDate() );
+        if (!seance) {
+            console.log("Can't find seance with date: " + req.params.date);
+            res.status(500).send('Cant find seance with date: ' + req.params.date + 1);
+            return;
+        }
+        var seanceJson = JSON.stringify(seance);
+        console.log("GET /seancesCur/" + req.params.date);
+        res.send(seanceJson);
+    });
+});
+
+
 /* Zwrócenie seansów w podanym dniu i o podanym id filmu */
 app.get('/seances/:date/:id', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
