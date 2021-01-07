@@ -323,14 +323,14 @@ app.get('/seances/:date', (req, res) => {
             return;
         }
         var seances = JSON.parse(seancesJson);
-        var seance = seances.find(seanceTmp => 
-            new Date(seanceTmp.date).getDay() == new Date(req.params.date).getDay() && 
-            new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth() && 
+        var seance = seances.filter(seanceTmp => 
+            new Date(seanceTmp.date).getDate() == new Date(req.params.date).getDate() && 
+            new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth()+1 && 
             new Date(seanceTmp.date).getFullYear() == new Date(req.params.date).getFullYear()
         );
         if (!seance) {
             console.log("Can't find seance with date: " + req.params.date);
-            res.status(500).send('Cant find seance with date: ' + req.params.date);
+            res.status(500).send('Cant find seance with date: ' + req.params.date + 1);
             return;
         }
         var seanceJson = JSON.stringify(seance);
@@ -352,6 +352,27 @@ app.get('/seances/:id', (req, res) => {
         if (!seance) {
             console.log("Can't find seance with id: " + req.params.id);
             res.status(500).send('Cant find seance with id: ' + req.params.id);
+            return;
+        }
+        var seanceJson = JSON.stringify(seance);
+        console.log("GET /seances/" + req.params.id);
+        res.send(seanceJson);
+    });
+});
+
+/* Zwrócenie seansÓW o podanym id */
+app.get('/seances1/:id', (req, res) => {
+    fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
+        if (err) {
+            console.log("File read failed in GET /seances/" + req.params.id + ": "+ err);
+            res.status(500).send('File read failed');
+            return;
+        }
+        var seances = JSON.parse(seancesJson);
+        var seance = seances.filter(seanceTmp => seanceTmp.movie.id == req.params.id);
+        if (!seance) {
+            console.log("Can't find seance with movie id: " + req.params.id);
+            res.status(500).send('Cant find seance with movie id: ' + req.params.id);
             return;
         }
         var seanceJson = JSON.stringify(seance);
