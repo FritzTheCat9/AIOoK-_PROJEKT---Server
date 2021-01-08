@@ -325,7 +325,7 @@ app.get('/seances/:date', (req, res) => {
         var seances = JSON.parse(seancesJson);
         var seance = seances.filter(seanceTmp => 
             new Date(seanceTmp.date).getDate() == new Date(req.params.date).getDate() && 
-            new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth()+1 && 
+            new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth() && 
             new Date(seanceTmp.date).getFullYear() == new Date(req.params.date).getFullYear()
         );
         if (!seance) {
@@ -392,7 +392,7 @@ app.get('/seances/:date/:id', (req, res) => {
         var seance = seances.filter(seanceTmp => 
             seanceTmp.movie.id === parseInt(req.params.id) &&
             new Date(seanceTmp.date).getDate() == new Date(req.params.date).getDate() && 
-            new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth()+1 && 
+            new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth() && 
             new Date(seanceTmp.date).getFullYear() == new Date(req.params.date).getFullYear()
         );
         if (!seance) {
