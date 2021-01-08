@@ -428,7 +428,7 @@ app.get('/seances/:id', (req, res) => {
     });
 });
 
-/* Zwrócenie seansÓW o podanym id */
+/* Zwrócenie seansÓW o podanym movie id */
 app.get('/seances1/:id', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
         if (err) {
@@ -445,6 +445,7 @@ app.get('/seances1/:id', (req, res) => {
         }
         var seanceJson = JSON.stringify(seance);
         console.log("GET /seances/" + req.params.id);
+        console.log("Seanse: " + seanceJson);
         res.send(seanceJson);
     });
 });
@@ -552,6 +553,35 @@ app.delete('/seances/:id', (req, res) => {
         } else {
             console.log("seance by id = " + req.params.id + " does not exists");
             res.status(500).send('seance by id = ' + req.params.id + ' does not exists');
+            return;
+        }
+    });
+});
+
+/* Usunięcie seansów będących na liscie */
+app.delete('/seancesList/:id', (req, res) => {
+    fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
+        if (err) {
+            console.log("File read failed in DELETE /seances: "+ err);
+            res.status(500).send('File read failed');
+            return;
+        }
+        var seances = JSON.parse(seancesJson);
+        var seanceIndexList = seances.filter(seanceTmp => seanceTmp.movie.id != req.params.id);
+        var newList = JSON.stringify(seanceIndexList);
+        if (newList != undefined) {
+            fs.writeFile('./seances.json', newList, err => {
+                if (err) {
+                    console.log("Error writing file in DELETE /seancesList/" + req.params.id+": "+ err);
+                    res.status(500).send('Error writing file seances.json');
+                } else {
+                    res.status(204).send();
+                    console.log("Successfully deleted seance with movie id = " + req.params.id);
+                }
+            });
+        } else {
+            console.log("seance by movie id = " + req.params.id + " does not exists");
+            res.status(500).send('seance by movie id = ' + req.params.id + ' does not exists');
             return;
         }
     });
