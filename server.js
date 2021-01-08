@@ -357,17 +357,6 @@ app.get('/seancesCur/:date', (req, res) => {
             // new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth()+1 && 
             // new Date(seanceTmp.date).getFullYear() == new Date(req.params.date).getFullYear()
         );
-        console.log("WWWWWWWWWWWWWWWWWWWWWWWw");
-        console.log(new Date(req.params.date).getDate() );
-        console.log(new Date(seances[0].date).getDate() );
-        console.log(new Date(seances[1].date).getDate() );
-        console.log(new Date(seances[2].date).getDate() );
-        console.log(new Date(seances[3].date).getDate() );
-        console.log(new Date(seances[4].date).getDate() );
-        console.log(new Date(seances[5].date).getDate() );
-        console.log(new Date(seances[6].date).getDate() );
-        console.log(new Date(seances[7].date).getDate() );
-        console.log(new Date(seances[8].date).getDate() );
         if (!seance) {
             console.log("Can't find seance with date: " + req.params.date);
             res.status(500).send('Cant find seance with date: ' + req.params.date + 1);
