@@ -1,7 +1,42 @@
 [
-  { "id": 3, "title": "Toy Story 1", "duration": 81 },
-  { "id": 4, "title": "Shrek 1", "duration": 95 },
-  { "id": 5, "title": "Shrek 2", "duration": 105 },
-  { "id": 6, "title": "Shrek 3", "duration": 92 },
-  { "id": 7, "title": "Shrek 4", "duration": 92 }
+    {
+        "id": 0,
+        "title": "Hobbit",
+        "duration": 182
+    },
+    {
+        "id": 1,
+        "title": "The Lord of the Rings",
+        "duration": 228
+    },
+    {
+        "id": 2,
+        "title": "Harry Potter 1",
+        "duration": 159
+    },
+    {
+        "id": 3,
+        "title": "Toy Story 1",
+        "duration": 81
+    },
+    {
+        "id": 4,
+        "title": "Shrek 1",
+        "duration": 95
+    },
+    {
+        "id": 5,
+        "title": "Shrek 2",
+        "duration": 105
+    },
+    {
+        "id": 6,
+        "title": "Shrek 3",
+        "duration": 92
+    },
+    {
+        "id": 7,
+        "title": "Shrek 4",
+        "duration": 92
+    }
 ]
