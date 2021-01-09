@@ -551,7 +551,7 @@ app.delete('/seances/:id', (req, res) => {
 app.delete('/seancesList/:id', (req, res) => {
     fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
         if (err) {
-            console.log("File read failed in DELETE /seances: "+ err);
+            console.log("File read failed in DELETE /seancesList: "+ err);
             res.status(500).send('File read failed');
             return;
         }
@@ -565,7 +565,7 @@ app.delete('/seancesList/:id', (req, res) => {
                     res.status(500).send('Error writing file seances.json');
                 } else {
                     res.status(204).send();
-                    console.log("Successfully deleted seance with movie id = " + req.params.id);
+                    console.log("Successfully deleted seances with movie id = " + req.params.id);
                 }
             });
         } else {
@@ -573,6 +573,79 @@ app.delete('/seancesList/:id', (req, res) => {
             res.status(500).send('seance by movie id = ' + req.params.id + ' does not exists');
             return;
         }
+    });
+});
+
+/* Edycja seansów po edycji filmów (update filmów w seansach) */
+app.put('/seancesListEditMovies', (req, res) => {
+    fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
+        if (err) {
+            console.log("File read failed in PUT /seancesListEditMovies/" + req.body.id +": "+ err);
+            res.status(500).send('File read failed');
+            return;
+        }
+        var seances = JSON.parse(seancesJson);
+        seances.forEach(seance => {
+            if(seance.movie.id === req.body.id && (seance.movie.title != req.body.title || seance.movie.duration != req.body.duration)) {
+                seance.movie.title = req.body.title;
+                seance.movie.duration = req.body.duration;
+            }
+        });
+        var newList = JSON.stringify(seances);
+        fs.writeFile('./seances.json', newList, err => {
+            if (err) {
+                console.log("Error writing file in PUT /seancesListEditMovies/" + req.body.id +": "+ err);
+                res.status(500).send('Error writing file seances.json');
+            } else {
+                res.status(200).send(req.body);
+                console.log("Successfully wrote file seances.json and edit seance with old id = " + req.body.id );
+            }
+        });
+
+        /*var seancesToEdit = seances.filter(seanceTmp => seanceTmp.movie.id == req.body.id).length;
+        for (i = 0; i < seancesToEdit; i++) {
+            var seanceBody = seances.find(seanceTmp => seanceTmp.movie.id == req.body.id && seanceTmp.movie.title != req.body.title);
+            if(seanceBody != undefined) {
+                
+            }
+        }*/
+
+        /*var seanceBody = seances.find(seanceTmp => seanceTmp.movie.id == req.body.id &&  seanceTmp.movie.title != req.body.title);
+        if (seanceBody && seanceBody.id != req.params.body.id ) {
+            console.log("seance by id = " + seanceBody.id + " already exists");
+            res.status(500).send('seance by id = ' + seanceBody.id + ' already exists');
+            return;
+        }
+        var seance = seances.find(seanceTmp => seanceTmp.id == req.params.body.id );
+        if (!seance) {
+            seances.push(req.body);
+            var newList = JSON.stringify(seances);
+            fs.writeFile('./seances.json', newList, err => {
+                if (err) {
+                    console.log("Error writing file in PUT /seancesListEditMovies/" + req.params.body.id +": "+err);
+                    res.status(500).send('Error writing file seances.json');
+                } else {
+                    res.status(201).send(req.body);
+                    console.log("Successfully wrote file seances.json and added new seance with id = " + req.body.id);
+                }
+            });
+        } else {
+            for (var i = 0; i < seances.length; i++) {
+                if (seances[i].id == seance.id) {
+                    seances[i] = req.body;
+                }
+            }
+            var newList = JSON.stringify(seances);
+            fs.writeFile('./seances.json', newList, err => {
+                if (err) {
+                    console.log("Error writing file in PUT /seancesListEditMovies/" + req.params.body.id +": "+ err);
+                    res.status(500).send('Error writing file seances.json');
+                } else {
+                    res.status(200).send(req.body);
+                    console.log("Successfully wrote file seances.json and edit seance with old id = " + req.params.body.id );
+                }
+            });
+        }*/
     });
 });
 
