@@ -423,7 +423,13 @@ app.get("/seancesCur/:date", (req, res) => {
     var seances = JSON.parse(seancesJson);
     var seance = seances.filter(
       (seanceTmp) =>
-        new Date(seanceTmp.date).getTime() > new Date(req.params.date).getTime()
+        //new Date(seanceTmp.date).getTime() >= new Date(req.params.date).getTime() ||
+
+
+        /*new Date(
+          new Date(seanceTmp.date).getTime() + seanceTmp.movie.duration * 60000
+        ).getTime() >= new Date(req.params.date).getTime()*/
+
       // new Date(seanceTmp.date).getMinutes() == new Date(req.params.date).getMinutes()&&
       // new Date(seanceTmp.date).getHours() == new Date(req.params.date).getHours()&&
       // new Date(seanceTmp.date).getDate() == new Date(req.params.date).getDate() &&
