@@ -423,13 +423,12 @@ app.get("/seancesCur/:date", (req, res) => {
     var seances = JSON.parse(seancesJson);
     var seance = seances.filter(
       (seanceTmp) =>
-        new Date(seanceTmp.date).getTime() > new Date(req.params.date).getTime()
-      // new Date(seanceTmp.date).getMinutes() == new Date(req.params.date).getMinutes()&&
-      // new Date(seanceTmp.date).getHours() == new Date(req.params.date).getHours()&&
-      // new Date(seanceTmp.date).getDate() == new Date(req.params.date).getDate() &&
-      // new Date(seanceTmp.date).getMonth() == new Date(req.params.date).getMonth()+1 &&
-      // new Date(seanceTmp.date).getFullYear() == new Date(req.params.date).getFullYear()
+        //new Date(seanceTmp.date).getTime() > new Date(req.params.date).getTime()
+        new Date(
+          new Date(seanceTmp.date).getTime() + seanceTmp.movie.duration * 60000
+        ).getTime() > new Date(req.params.date).getTime()
     );
+
     if (!seance) {
       console.log("Can't find seance with date: " + req.params.date);
       res
@@ -554,19 +553,19 @@ app.get("/seancesView/:id", (req, res) => {
     var views = [0, 0, 0, 0, 0, 0, 0];
     seance.forEach((element) => {
       if (new Date(element.date).getDay() === 0) {
-        views[0] += 1;
+        views[0] += element.ticketsSold;
       } else if (new Date(element.date).getDay() === 1) {
-        views[1] += 1;
+        views[1] += element.ticketsSold;
       } else if (new Date(element.date).getDay() === 2) {
-        views[2] += 1;
+        views[2] += element.ticketsSold;
       } else if (new Date(element.date).getDay() === 3) {
-        views[3] += 1;
+        views[3] += element.ticketsSold;
       } else if (new Date(element.date).getDay() === 4) {
-        views[4] += 1;
+        views[4] += element.ticketsSold;
       } else if (new Date(element.date).getDay() === 5) {
-        views[5] += 1;
+        views[5] += element.ticketsSold;
       } else if (new Date(element.date).getDay() === 6) {
-        views[6] += 1;
+        views[6] += element.ticketsSold;
       }
     });
     var seanceJson = JSON.stringify(views);

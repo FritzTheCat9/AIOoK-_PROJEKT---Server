@@ -359,8 +359,8 @@
     "date": "2021-02-04T15:45:00.000Z",
     "movie": { "id": 6, "title": "Shrek 3", "duration": 92 },
     "hall": { "number": 2, "capacity": 100 },
-    "ticketsSold": 0,
-    "ticketsAvaliable": 100,
+    "ticketsSold": 20,
+    "ticketsAvaliable": 80,
     "occupiedSeats": [
       0,
       0,
