@@ -377,7 +377,7 @@ app.get("/seances", (req, res) => {
 });
 
 /* Zwrócenie seansów w podanym dniu */
-app.get("/seances/:date", (req, res) => {
+app.get("/seancesDate/:date", (req, res) => {
   fs.readFile("./seances.json", "utf8", (err, seancesJson) => {
     if (err) {
       console.log(
@@ -724,7 +724,7 @@ app.delete("/seancesList/:id", (req, res) => {
     if (newList != undefined) {
       fs.writeFile("./seances.json", newList, (err) => {
         if (err) {
-            /*console.log("File read failed in DELETE /seancesList: "+ err);
+          /*console.log("File read failed in DELETE /seancesList: "+ err);
             res.status(500).send('File read failed');
             return;
         }
@@ -767,31 +767,48 @@ app.delete("/seancesList/:id", (req, res) => {
 });
 
 /* Edycja seansów po edycji filmów (update filmów w seansach) */
-app.put('/seancesListEditMovies', (req, res) => {
-    fs.readFile('./seances.json', 'utf8', (err, seancesJson) => {
-        if (err) {
-            console.log("File read failed in PUT /seancesListEditMovies/" + req.body.id +": "+ err);
-            res.status(500).send('File read failed');
-            return;
-        }
-        var seances = JSON.parse(seancesJson);
-        seances.forEach(seance => {
-            if(seance.movie.id === req.body.id && (seance.movie.title != req.body.title || seance.movie.duration != req.body.duration)) {
-                seance.movie.title = req.body.title;
-                seance.movie.duration = req.body.duration;
-            }
-        });
-        var newList = JSON.stringify(seances);
-        fs.writeFile('./seances.json', newList, err => {
-            if (err) {
-                console.log("Error writing file in PUT /seancesListEditMovies/" + req.body.id +": "+ err);
-                res.status(500).send('Error writing file seances.json');
-            } else {
-                res.status(200).send(req.body);
-                console.log("Successfully wrote file seances.json and edit seance with old id = " + req.body.id );
-            }
-        });
+app.put("/seancesListEditMovies", (req, res) => {
+  fs.readFile("./seances.json", "utf8", (err, seancesJson) => {
+    if (err) {
+      console.log(
+        "File read failed in PUT /seancesListEditMovies/" +
+          req.body.id +
+          ": " +
+          err
+      );
+      res.status(500).send("File read failed");
+      return;
+    }
+    var seances = JSON.parse(seancesJson);
+    seances.forEach((seance) => {
+      if (
+        seance.movie.id === req.body.id &&
+        (seance.movie.title != req.body.title ||
+          seance.movie.duration != req.body.duration)
+      ) {
+        seance.movie.title = req.body.title;
+        seance.movie.duration = req.body.duration;
+      }
     });
+    var newList = JSON.stringify(seances);
+    fs.writeFile("./seances.json", newList, (err) => {
+      if (err) {
+        console.log(
+          "Error writing file in PUT /seancesListEditMovies/" +
+            req.body.id +
+            ": " +
+            err
+        );
+        res.status(500).send("Error writing file seances.json");
+      } else {
+        res.status(200).send(req.body);
+        console.log(
+          "Successfully wrote file seances.json and edit seance with old id = " +
+            req.body.id
+        );
+      }
+    });
+  });
 });
 
 app.listen(7777, () => console.log("Server address http://localhost:7777"));
