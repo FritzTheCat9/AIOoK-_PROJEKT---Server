@@ -23,13 +23,12 @@ app.get("/", (req, res) => {
 app.get("/movies", (req, res) => {
   fs.readFile("./movies.json", "utf8", (err, moviesJson) => {
     if (err) {
-      // BŁĄD - brak pliku movies.json - 500 - Internal Server Error
       console.log("File read failed in GET /movies: " + err);
       res.status(500).send("File read failed");
       return;
     }
     console.log("GET: /movies");
-    res.send(moviesJson); // zwrócenie listy filmów z pliku movies.json - 200 - OK
+    res.send(moviesJson);
   });
 });
 
@@ -37,24 +36,22 @@ app.get("/movies", (req, res) => {
 app.get("/movies/:id", (req, res) => {
   fs.readFile("./movies.json", "utf8", (err, moviesJson) => {
     if (err) {
-      // BŁĄD - brak pliku movies.json - 500 - Internal Server Error
       console.log(
         "File read failed in GET /movies/" + req.params.id + ": " + err
       );
       res.status(500).send("File read failed");
       return;
     }
-    var movies = JSON.parse(moviesJson); // pobranie pliku JSON do obiektu (lista filmów)
-    var movie = movies.find((movieTmp) => movieTmp.id == req.params.id); // wyszukanie filmu o określonym id
+    var movies = JSON.parse(moviesJson);
+    var movie = movies.find((movieTmp) => movieTmp.id == req.params.id);
     if (!movie) {
-      // BŁĄD - brak filmu o id pobranym w URL
       console.log("Can't find movie with id: " + req.params.id);
       res.status(500).send("Cant find movie with id: " + req.params.id);
       return;
     }
-    var movieJson = JSON.stringify(movie); // zapis pobranego obiektu movie w postaci JSON
+    var movieJson = JSON.stringify(movie);
     console.log("GET /movies/" + req.params.id);
-    res.send(movieJson); // zwrócenie pobranego filmu
+    res.send(movieJson);
   });
 });
 
@@ -62,33 +59,29 @@ app.get("/movies/:id", (req, res) => {
 app.post("/movies", (req, res) => {
   fs.readFile("./movies.json", "utf8", (err, moviesJson) => {
     if (err) {
-      // BŁĄD - brak pliku movies.json
       console.log("File read failed in POST /movies: " + err);
       res.status(500).send("File read failed");
       return;
     }
-    var movies = JSON.parse(moviesJson); // pobranie pliku JSON do obiektu (lista filmów)
-    var movie = movies.find((movieTmp) => movieTmp.id == req.body.id); // wyszukanie filmu o określonym id w body
+    var movies = JSON.parse(moviesJson);
+    var movie = movies.find((movieTmp) => movieTmp.id == req.body.id);
     if (!movie) {
-      // jeśli nie ma filmu o podanym id w pliku JSON, to go dodajemy
       movies.push(req.body);
-      var newList = JSON.stringify(movies); // zapis nowej listy filmów w postaci JSON
+      var newList = JSON.stringify(movies);
       fs.writeFile("./movies.json", newList, (err) => {
         if (err) {
-          // BŁĄD - nie można zapisać do pliku movies.json
           console.log("Error writing file in POST /movies: " + err);
           res.status(500).send("Error writing file movies.json");
         } else {
-          // pomyślnie zapisano nową liste filmów do pliku movies.json
-          res.status(201).send(req.body); // 201 - Created
+          res.status(201).send(req.body);
           console.log(
             "Successfully wrote file movies.json and added new movie with id = " +
-              req.body.id
+            req.body.id
           );
         }
       });
     } else {
-      console.log("movie by id = " + req.body.id + " already exists"); // BŁĄD - podany film już istnieje
+      console.log("movie by id = " + req.body.id + " already exists");
       res.status(500).send("movie by id = " + req.body.id + " already exists");
       return;
     }
@@ -99,7 +92,6 @@ app.post("/movies", (req, res) => {
 app.put("/movies/:id", (req, res) => {
   fs.readFile("./movies.json", "utf8", (err, moviesJson) => {
     if (err) {
-      // BŁĄD - brak pliku movies.json
       console.log(
         "File read failed in PUT /movies/" + req.params.id + ": " + err
       );
@@ -109,34 +101,30 @@ app.put("/movies/:id", (req, res) => {
     var movies = JSON.parse(moviesJson);
     var movieBody = movies.find((movieTmp) => movieTmp.id == req.body.id);
     if (movieBody && movieBody.id != req.params.id) {
-      // BŁĄD - istnieje juz film o id podanym w body jest on w pliku JSON
-      console.log("movie by id = " + movieBody.id + " already exists"); // id w URL jest inne od id w body, nie możemy zmienić filmu
-      res.status(500).send("movie by id = " + movieBody.id + " already exists"); // sprzeczne odwołanie do obiektu poprzez podanie innego id w url i body
+      console.log("movie by id = " + movieBody.id + " already exists");
+      res.status(500).send("movie by id = " + movieBody.id + " already exists");
       return;
     }
     var movie = movies.find((movieTmp) => movieTmp.id == req.params.id);
     if (!movie) {
-      // Dodanie filmu gdy nie ma go jeszcze na liście w pliku JSON
-      movies.push(req.body); // (gdy nie ma filmu o id przekazanym w URL (i body), to go dodajemy)
+      movies.push(req.body);
       var newList = JSON.stringify(movies);
       fs.writeFile("./movies.json", newList, (err) => {
         if (err) {
           console.log(
             "Error writing file in PUT /movies/" + req.params.id + ": " + err
-          ); // BŁĄD - nie można zapisać do pliku movies.json
+          );
           res.status(500).send("Error writing file movies.json");
         } else {
-          res.status(201).send(req.body); // 201 - Created
+          res.status(201).send(req.body);
           console.log(
             "Successfully wrote file movies.json and added new movie with id = " +
-              req.body.id
-          ); // pomyślne dodanie nowego filmu
+            req.body.id
+          );
         }
       });
     } else {
-      // Zmiana istniejącego filmu na liście w pliku JSON
       for (var i = 0; i < movies.length; i++) {
-        // (gdy istnieje film o id przekazanym w URL, to go edytujemy)
         if (movies[i].id == movie.id) {
           movies[i] = req.body;
         }
@@ -146,14 +134,14 @@ app.put("/movies/:id", (req, res) => {
         if (err) {
           console.log(
             "Error writing file in PUT /movies/" + req.params.id + ": " + err
-          ); // BŁĄD - nie można zapisać do pliku movies.json
+          );
           res.status(500).send("Error writing file movies.json");
         } else {
-          res.status(200).send(req.body); // 200 - OK
+          res.status(200).send(req.body);
           console.log(
             "Successfully wrote file movies.json and edit movie with old id = " +
-              req.params.id
-          ); // pomyślna edycja starego filmu
+            req.params.id
+          );
         }
       });
     }
@@ -164,32 +152,30 @@ app.put("/movies/:id", (req, res) => {
 app.delete("/movies/:id", (req, res) => {
   fs.readFile("./movies.json", "utf8", (err, moviesJson) => {
     if (err) {
-      // BŁĄD - brak pliku movies.json
       console.log("File read failed in DELETE /movies: " + err);
       res.status(500).send("File read failed");
       return;
     }
-    var movies = JSON.parse(moviesJson); // pobranie pliku JSON do obiektu (lista filmów)
+    var movies = JSON.parse(moviesJson);
     var movieIndex = movies.findIndex(
       (movieTmp) => movieTmp.id == req.params.id
-    ); // wyszukanie filmu o określonym id
+    );
     if (movieIndex != -1) {
-      // jeżeli znaleziono id filmu w liście filmów to należy go usunąć
       movies.splice(movieIndex, 1);
-      var newList = JSON.stringify(movies); // zapis nowej listy filmów w postaci JSON
+      var newList = JSON.stringify(movies);
       fs.writeFile("./movies.json", newList, (err) => {
         if (err) {
           console.log(
             "Error writing file in DELETE /movies/" + req.params.id + ": " + err
-          ); // BŁĄD - nie można zapisać do pliku movies.json
+          );
           res.status(500).send("Error writing file movies.json");
         } else {
-          res.status(204).send(); // pomyślnie zapisano nową liste filmów do pliku movies.json
-          console.log("Successfully deleted movie with id = " + req.params.id); // 204 - No content
+          res.status(204).send();
+          console.log("Successfully deleted movie with id = " + req.params.id);
         }
       });
     } else {
-      console.log("movie by id = " + req.params.id + " does not exists"); // BŁĄD - brak filmu o podanym id, więc nie trzeba nic usuwać
+      console.log("movie by id = " + req.params.id + " does not exists");
       res
         .status(500)
         .send("movie by id = " + req.params.id + " does not exists");
@@ -255,7 +241,7 @@ app.post("/halls", (req, res) => {
           res.status(201).send(req.body);
           console.log(
             "Successfully wrote file halls.json and added new hall with id = " +
-              req.body.id
+            req.body.id
           );
         }
       });
@@ -298,7 +284,7 @@ app.put("/halls/:id", (req, res) => {
           res.status(201).send(req.body);
           console.log(
             "Successfully wrote file halls.json and added new hall with id = " +
-              req.body.id
+            req.body.id
           );
         }
       });
@@ -319,7 +305,7 @@ app.put("/halls/:id", (req, res) => {
           res.status(200).send(req.body);
           console.log(
             "Successfully wrote file halls.json and edit hall with old id = " +
-              req.params.id
+            req.params.id
           );
         }
       });
@@ -390,11 +376,11 @@ app.get("/seancesDate/:date", (req, res) => {
     var seance = seances.filter(
       (seanceTmp) =>
         new Date(seanceTmp.date).getDate() ==
-          new Date(req.params.date).getDate() &&
+        new Date(req.params.date).getDate() &&
         new Date(seanceTmp.date).getMonth() ==
-          new Date(req.params.date).getMonth() &&
+        new Date(req.params.date).getMonth() &&
         new Date(seanceTmp.date).getFullYear() ==
-          new Date(req.params.date).getFullYear()
+        new Date(req.params.date).getFullYear()
     );
     if (!seance) {
       console.log("Can't find seance with date: " + req.params.date);
@@ -448,11 +434,11 @@ app.get("/seances/:date/:id", (req, res) => {
     if (err) {
       console.log(
         "File read failed in GET /seances/" +
-          req.params.date +
-          "/" +
-          req.params.id +
-          ": " +
-          err
+        req.params.date +
+        "/" +
+        req.params.id +
+        ": " +
+        err
       );
       res.status(500).send("File read failed");
       return;
@@ -462,11 +448,11 @@ app.get("/seances/:date/:id", (req, res) => {
       (seanceTmp) =>
         seanceTmp.movie.id === parseInt(req.params.id) &&
         new Date(seanceTmp.date).getDate() ==
-          new Date(req.params.date).getDate() &&
+        new Date(req.params.date).getDate() &&
         new Date(seanceTmp.date).getMonth() ==
-          new Date(req.params.date).getMonth() &&
+        new Date(req.params.date).getMonth() &&
         new Date(seanceTmp.date).getFullYear() ==
-          new Date(req.params.date).getFullYear()
+        new Date(req.params.date).getFullYear()
     );
     if (!seance) {
       console.log("Can't find seance with date: " + req.params.date);
@@ -595,7 +581,7 @@ app.post("/seances", (req, res) => {
           res.status(201).send(req.body);
           console.log(
             "Successfully wrote file seances.json and added new seance with id = " +
-              req.body.id
+            req.body.id
           );
         }
       });
@@ -640,7 +626,7 @@ app.put("/seances/:id", (req, res) => {
           res.status(201).send(req.body);
           console.log(
             "Successfully wrote file seances.json and added new seance with id = " +
-              req.body.id
+            req.body.id
           );
         }
       });
@@ -661,7 +647,7 @@ app.put("/seances/:id", (req, res) => {
           res.status(200).send(req.body);
           console.log(
             "Successfully wrote file seances.json and edit seance with old id = " +
-              req.params.id
+            req.params.id
           );
         }
       });
@@ -688,9 +674,9 @@ app.delete("/seances/:id", (req, res) => {
         if (err) {
           console.log(
             "Error writing file in DELETE /seances/" +
-              req.params.id +
-              ": " +
-              err
+            req.params.id +
+            ": " +
+            err
           );
           res.status(500).send("Error writing file seances.json");
         } else {
@@ -744,9 +730,9 @@ app.delete("/seancesList/:id", (req, res) => {
 
           console.log(
             "Error writing file in DELETE /seancesList/" +
-              req.params.id +
-              ": " +
-              err
+            req.params.id +
+            ": " +
+            err
           );
           res.status(500).send("Error writing file seances.json");
         } else {
@@ -772,9 +758,9 @@ app.put("/seancesListEditMovies", (req, res) => {
     if (err) {
       console.log(
         "File read failed in PUT /seancesListEditMovies/" +
-          req.body.id +
-          ": " +
-          err
+        req.body.id +
+        ": " +
+        err
       );
       res.status(500).send("File read failed");
       return;
@@ -795,16 +781,16 @@ app.put("/seancesListEditMovies", (req, res) => {
       if (err) {
         console.log(
           "Error writing file in PUT /seancesListEditMovies/" +
-            req.body.id +
-            ": " +
-            err
+          req.body.id +
+          ": " +
+          err
         );
         res.status(500).send("Error writing file seances.json");
       } else {
         res.status(200).send(req.body);
         console.log(
           "Successfully wrote file seances.json and edit seance with old id = " +
-            req.body.id
+          req.body.id
         );
       }
     });
